@@ -1,24 +1,22 @@
+// test_Counter.test.ts
 import { describe, it, expect } from 'vitest';
-import { Counter } from '../src/Counter';
+import { render, fireEvent } from '@testing-library/svelte';
+import Counter from './Counter.svelte';
 
-describe('Counter', () => {
-    it('should increment the count', () => {
-        const counter = new Counter();
-        counter.increment();
-        expect(counter.getCount()).toBe(1);
-    });
+describe('Counter Component', () => {
+  it('should render with initial count of 0', () => {
+    const { getByText } = render(Counter);
+    expect(getByText('count is 0')).toBeTruthy();
+  });
 
-    it('should decrement the count', () => {
-        const counter = new Counter();
-        counter.increment();
-        counter.decrement();
-        expect(counter.getCount()).toBe(0);
-    });
+  it('should increment count when button is clicked', async () => {
+    const { getByText } = render(Counter);
+    const button = getByText('count is 0');
 
-    it('should reset the count', () => {
-        const counter = new Counter();
-        counter.increment();
-        counter.reset();
-        expect(counter.getCount()).toBe(0);
-    });
+    await fireEvent.click(button);
+    expect(getByText('count is 1')).toBeTruthy();
+
+    await fireEvent.click(button);
+    expect(getByText('count is 2')).toBeTruthy();
+  });
 });
